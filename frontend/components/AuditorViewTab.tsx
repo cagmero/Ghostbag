@@ -183,17 +183,13 @@ function AuditorMetricsView() {
         args: [],
       })) as bigint;
 
-      const decryptResult = await client
-        .decryptHandle(handle, FheTypes.Uint64)
-        .decrypt();
-
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
+      const value = await client
+        .decryptForView(handle, FheTypes.Uint64)
+        .execute();
 
       setRiskState({
         status: "decrypted",
-        decryptedValue: BigInt(decryptResult.data.toString()),
+        decryptedValue: BigInt(value.toString()),
         error: null,
       });
     } catch (err: any) {
@@ -221,17 +217,13 @@ function AuditorMetricsView() {
         args: [],
       })) as bigint;
 
-      const decryptResult = await client
-        .decryptHandle(handle, FheTypes.Uint8)
-        .decrypt();
-
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
+      const value = await client
+        .decryptForView(handle, FheTypes.Uint8)
+        .execute();
 
       setComplianceState({
         status: "decrypted",
-        decryptedValue: BigInt(decryptResult.data.toString()),
+        decryptedValue: BigInt(value.toString()),
         error: null,
       });
     } catch (err: any) {

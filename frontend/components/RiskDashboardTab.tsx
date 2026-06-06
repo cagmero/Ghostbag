@@ -345,18 +345,14 @@ export function RiskDashboardTab() {
         args: [],
       })) as bigint;
 
-      const decryptResult = await client
-        .decryptHandle(handle, FheTypes.Uint64)
-        .decrypt();
-
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
+      const value = await client
+        .decryptForView(handle, FheTypes.Uint64)
+        .execute();
 
       setRiskState((prev) => ({
         ...prev,
         status: "decrypted",
-        decryptedValue: BigInt(decryptResult.data.toString()),
+        decryptedValue: BigInt(value.toString()),
       }));
     } catch (err: any) {
       setRiskState((prev) => ({
@@ -383,18 +379,14 @@ export function RiskDashboardTab() {
         args: [],
       })) as bigint;
 
-      const decryptResult = await client
-        .decryptHandle(handle, FheTypes.Uint64)
-        .decrypt();
-
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
+      const value = await client
+        .decryptForView(handle, FheTypes.Uint64)
+        .execute();
 
       setHealthState((prev) => ({
         ...prev,
         status: "decrypted",
-        decryptedValue: BigInt(decryptResult.data.toString()),
+        decryptedValue: BigInt(value.toString()),
       }));
     } catch (err: any) {
       setHealthState((prev) => ({
@@ -421,18 +413,14 @@ export function RiskDashboardTab() {
         args: [],
       })) as bigint;
 
-      const decryptResult = await client
-        .decryptHandle(handle, FheTypes.Uint8)
-        .decrypt();
-
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
+      const value = await client
+        .decryptForView(handle, FheTypes.Uint8)
+        .execute();
 
       setComplianceState((prev) => ({
         ...prev,
         status: "decrypted",
-        decryptedValue: BigInt(decryptResult.data.toString()),
+        decryptedValue: BigInt(value.toString()),
       }));
     } catch (err: any) {
       setComplianceState((prev) => ({

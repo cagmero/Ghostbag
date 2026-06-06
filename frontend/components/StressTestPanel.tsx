@@ -137,17 +137,15 @@ export function StressTestPanel() {
           args: [],
         })) as bigint;
 
-        const decryptResult = await client
-          .decryptHandle(handle, FheTypes.Uint8)
-          .decrypt();
+        const value = await client
+          .decryptForView(handle, FheTypes.Uint8)
+          .execute();
 
-        if (decryptResult.success) {
-          // Store previous tier before updating
-          if (currentTier !== null) {
-            setPreviousTier(currentTier);
-          }
-          setCurrentTier(Number(decryptResult.data));
+        // Store previous tier before updating
+        if (currentTier !== null) {
+          setPreviousTier(currentTier);
         }
+        setCurrentTier(Number(value));
       }
 
       // Mark success and update last successful weights

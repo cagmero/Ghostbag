@@ -6,8 +6,10 @@ import type { PublicClient, WalletClient } from "viem";
 
 // Re-export types for consumers
 export type CofheClient = {
-  encryptInputs: (inputs: any[]) => { encrypt: () => Promise<any> };
-  decryptHandle: (ctHash: bigint, utype: any) => { decrypt: () => Promise<any> };
+  encryptInputs: (inputs: any[]) => any;
+  decryptHandle: (ctHash: bigint, utype: any) => any;
+  decryptForView: (ctHash: bigint, utype: any) => any;
+  decryptForTx: (ctHash: bigint) => any;
   connected: boolean;
 };
 
@@ -41,30 +43,24 @@ export function useCofheClient() {
       setError(null);
 
       try {
-        const { createCofhesdkConfig, createCofhesdkClient } = await import(
+        const { createCofheConfig, createCofheClient } = await import(
           "@cofhe/sdk/web"
         );
         const { sepolia } = await import("@cofhe/sdk/chains");
 
-        const config = createCofhesdkConfig({
+        const config = createCofheConfig({
           supportedChains: [sepolia],
         });
 
-        const cofheClient = createCofhesdkClient(config);
+        const cofheClient = createCofheClient(config);
 
-        const connectResult = await cofheClient.connect(
-          publicClient as PublicClient,
-          walletClient as WalletClient
+        await cofheClient.connect(
+          publicClient as any,
+          walletClient as any
         );
 
         if (!cancelled) {
-          if (connectResult.success) {
-            setClient(cofheClient as unknown as CofheClient);
-          } else {
-            setError(
-              connectResult.error?.message ?? "Failed to connect CoFHE client"
-            );
-          }
+          setClient(cofheClient as unknown as CofheClient);
         }
       } catch (err: any) {
         if (!cancelled) {

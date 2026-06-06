@@ -236,15 +236,11 @@ export function GhostPayTab() {
 
     try {
       const { Encryptable } = await import("@cofhe/sdk");
-      const encryptResult = await client
+      const encryptedItems = await client
         .encryptInputs([Encryptable.uint64(amountBigInt)])
-        .encrypt();
+        .execute();
 
-      if (!encryptResult.success) {
-        throw encryptResult.error;
-      }
-
-      const [encrypted] = encryptResult.data;
+      const encrypted = encryptedItems[0];
 
       // Build a hex representation for display
       const handleHex =
@@ -378,16 +374,11 @@ export function GhostPayTab() {
       // Step 3: Decrypt the ebool handle
       const { FheTypes } = await import("@cofhe/sdk");
 
-      const decryptResult = await client
-        .decryptHandle(eboolHandle, FheTypes.Bool)
-        .decrypt();
+      const meetsThreshold = await client
+        .decryptForView(eboolHandle, FheTypes.Bool)
+        .execute();
 
-      if (!decryptResult.success) {
-        throw decryptResult.error;
-      }
-
-      const meetsThreshold = Boolean(decryptResult.data);
-      setVerifyResult(meetsThreshold);
+      setVerifyResult(Boolean(meetsThreshold));
       setVerifyStatus("success");
     } catch (err: any) {
       setVerifyStatus("error");

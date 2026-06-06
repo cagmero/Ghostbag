@@ -273,15 +273,11 @@ export function PositionsTab() {
 
       try {
         const { Encryptable } = await import("@cofhe/sdk");
-        const encryptResult = await client
+        const encryptedItems = await client
           .encryptInputs([Encryptable.uint64(amount)])
-          .encrypt();
+          .execute();
 
-        if (!encryptResult.success) {
-          throw encryptResult.error;
-        }
-
-        const [encrypted] = encryptResult.data;
+        const encrypted = encryptedItems[0];
 
         // Build a hex representation of the handle for display
         const handleHex =
@@ -349,16 +345,11 @@ export function PositionsTab() {
           args: [assetId],
         })) as bigint;
 
-        // Decrypt using the SDK's decryptHandle with permit
-        const decryptResult = await client
-          .decryptHandle(handle, FheTypes.Uint64)
-          .decrypt();
+        // Decrypt using the SDK's decryptForView with permit
+        const value = await client
+          .decryptForView(handle, FheTypes.Uint64)
+          .execute();
 
-        if (!decryptResult.success) {
-          throw decryptResult.error;
-        }
-
-        const value = decryptResult.data;
         updateAssetState(assetId, {
           isDecrypting: false,
           decryptedBalance: BigInt(value.toString()),
