@@ -243,12 +243,9 @@ export function GhostPayTab() {
       const encrypted = encryptedItems[0];
 
       // Build a hex representation for display
-      const handleHex =
-        typeof encrypted === "object" && encrypted !== null && "data" in encrypted
-          ? `0x${Array.from(new Uint8Array((encrypted as any).data).slice(0, 20))
-              .map((b: number) => b.toString(16).padStart(2, "0"))
-              .join("")}`
-          : String(encrypted).slice(0, 42);
+      const handleHex = encrypted.ctHash
+        ? `0x${encrypted.ctHash.toString(16).padStart(12, "0")}`
+        : "[encrypted]";
 
       setEncryptedHandle(handleHex);
 

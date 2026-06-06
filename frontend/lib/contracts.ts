@@ -79,7 +79,10 @@ export const GHOSTBAG_GUARD_ABI = [
         type: "tuple",
         internalType: "struct InEuint64",
         components: [
-          { name: "data", type: "bytes", internalType: "bytes" },
+          { name: "ctHash", type: "uint256", internalType: "uint256" },
+          { name: "securityZone", type: "uint8", internalType: "uint8" },
+          { name: "utype", type: "uint8", internalType: "uint8" },
+          { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
     ],
@@ -97,7 +100,10 @@ export const GHOSTBAG_GUARD_ABI = [
         type: "tuple",
         internalType: "struct InEuint64",
         components: [
-          { name: "data", type: "bytes", internalType: "bytes" },
+          { name: "ctHash", type: "uint256", internalType: "uint256" },
+          { name: "securityZone", type: "uint8", internalType: "uint8" },
+          { name: "utype", type: "uint8", internalType: "uint8" },
+          { name: "signature", type: "bytes", internalType: "bytes" },
         ],
       },
       { name: "recipient", type: "address", internalType: "address" },

@@ -279,13 +279,10 @@ export function PositionsTab() {
 
         const encrypted = encryptedItems[0];
 
-        // Build a hex representation of the handle for display
-        const handleHex =
-          typeof encrypted === "object" && encrypted !== null && "data" in encrypted
-            ? `0x${Array.from(new Uint8Array((encrypted as any).data).slice(0, 20))
-                .map((b: number) => b.toString(16).padStart(2, "0"))
-                .join("")}`
-            : String(encrypted).slice(0, 42);
+        // Build a hex representation of the ctHash for display
+        const handleHex = encrypted.ctHash
+          ? `0x${encrypted.ctHash.toString(16).padStart(12, "0")}`
+          : "[encrypted]";
 
         updateAssetState(assetId, {
           isEncrypting: false,
