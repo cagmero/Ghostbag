@@ -236,16 +236,30 @@ export function GhostPayTab() {
 
     try {
       const { Encryptable } = await import("@cofhe/sdk");
+
+      console.group(`[FHE] GhostPay: Encrypting ${amountBigInt} for recipient ${recipient.trim()}`);
+      console.log("[FHE] Plaintext amount:", amountBigInt.toString());
+      console.time("[FHE] Encryption duration");
+
       const encryptedItems = await client
         .encryptInputs([Encryptable.uint64(amountBigInt)])
         .execute();
 
+      console.timeEnd("[FHE] Encryption duration");
+
       const encrypted = encryptedItems[0];
 
+      console.log("[FHE] Encryption result:", {
+        ctHash: encrypted.ctHash.toString(),
+        ctHashHex: `0x${encrypted.ctHash.toString(16)}`,
+        securityZone: encrypted.securityZone,
+        utype: encrypted.utype,
+        signature: encrypted.signature,
+      });
+      console.groupEnd();
+
       // Build a hex representation for display
-      const handleHex = encrypted.ctHash
-        ? `0x${encrypted.ctHash.toString(16).padStart(12, "0")}`
-        : "[encrypted]";
+      const handleHex = `0x${encrypted.ctHash.toString(16)}`;
 
       setEncryptedHandle(handleHex);
 
@@ -511,9 +525,9 @@ export function GhostPayTab() {
         {/* Encrypted Handle Preview */}
         {encryptedHandle && (
           <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-            <p className="text-xs text-muted-foreground">Encrypted amount handle:</p>
-            <p className="font-mono text-xs text-primary">
-              {truncateHandle(encryptedHandle)}
+            <p className="text-xs text-muted-foreground">Encrypted amount ctHash:</p>
+            <p className="font-mono text-xs text-primary break-all select-all">
+              {encryptedHandle}
             </p>
           </div>
         )}

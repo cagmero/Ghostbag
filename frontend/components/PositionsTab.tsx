@@ -108,9 +108,9 @@ function AssetCard({
       {/* Encrypted Handle Preview */}
       {state.encryptedHandle && (
         <div className="mb-3 rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-          <p className="text-xs text-muted-foreground">Encrypted handle:</p>
-          <p className="font-mono text-xs text-primary">
-            {truncateHandle(state.encryptedHandle)}
+          <p className="text-xs text-muted-foreground">Encrypted ctHash:</p>
+          <p className="font-mono text-xs text-primary break-all select-all">
+            {state.encryptedHandle}
           </p>
         </div>
       )}
@@ -273,16 +273,30 @@ export function PositionsTab() {
 
       try {
         const { Encryptable } = await import("@cofhe/sdk");
+
+        console.group(`[FHE] Encrypting ${amount} for asset ${assetId}`);
+        console.log("[FHE] Plaintext input:", amount.toString());
+        console.time("[FHE] Encryption duration");
+
         const encryptedItems = await client
           .encryptInputs([Encryptable.uint64(amount)])
           .execute();
 
+        console.timeEnd("[FHE] Encryption duration");
+
         const encrypted = encryptedItems[0];
 
-        // Build a hex representation of the ctHash for display
-        const handleHex = encrypted.ctHash
-          ? `0x${encrypted.ctHash.toString(16).padStart(12, "0")}`
-          : "[encrypted]";
+        console.log("[FHE] Encryption result:", {
+          ctHash: encrypted.ctHash.toString(),
+          ctHashHex: `0x${encrypted.ctHash.toString(16)}`,
+          securityZone: encrypted.securityZone,
+          utype: encrypted.utype,
+          signature: encrypted.signature,
+        });
+        console.groupEnd();
+
+        // Show the full ctHash as hex for display
+        const handleHex = `0x${encrypted.ctHash.toString(16)}`;
 
         updateAssetState(assetId, {
           isEncrypting: false,
