@@ -286,10 +286,10 @@ export function GhostPayTab() {
       setPaymentRef("");
       setEncryptedHandle(null);
     } catch (err: any) {
-      const isCofheError =
-        err?.code && typeof err.code === "string" && err.code.includes("_");
-      const errorMsg = isCofheError
-        ? `Encryption failed: ${err.message}`
+      const errorMsg = err?.message?.includes("Only owner")
+        ? "Only the contract owner can execute payments. Please switch to the deployer wallet."
+        : err?.message?.includes("reverted")
+        ? `Transaction reverted: ${err.shortMessage || err.message.split("\n")[0]}`
         : err?.message ?? "Operation failed";
 
       setStatus("error");

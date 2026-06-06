@@ -11,7 +11,10 @@ export const wagmiConfig = createConfig({
       dappMetadata: {
         name: "Ghostbag",
       },
-    }),
+      logging: { developerMode: false },
+      infuraAPIKey: undefined,
+      enableAnalytics: false,
+    } as any),
   ],
   ssr: true,
   storage: createStorage({
