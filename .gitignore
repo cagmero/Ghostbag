@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build artifacts
+artifacts/
+cache/
+typechain-types/
+frontend/.next/
+frontend/out/
+
+# Environment secrets
+.env
+.env.local
+.env.production
+
+# IDE / Editor
+.kiro
+.vscode
+.DS_Store
+
+# Internal planning docs (not part of submission)
+architecture.md
+context.md
+fhenix.md
+plan.md
+spec.md
+fhenix-skills/
+
+# Lock files (keep package-lock.json, ignore others)
+yarn.lock
+pnpm-lock.yaml
